@@ -1,0 +1,163 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project]
+name = "pyrogram-async-redis-storage"
+description = "Redis-based async storage solution for Pyrogram applications."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Artem Ukolov", email = "deusdeveloper@yandex.com" },
+]
+keywords = [
+    "pyrogram",
+    "storage",
+    "redis",
+    "asyncio",
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Networking",
+    "Typing :: Typed",
+    "Intended Audience :: Developers",
+    "Environment :: Web Environment",
+    "Framework :: AsyncIO",
+]
+dynamic = ["version"]
+dependencies = [
+    "redis>=5.2.1",
+    "Pyrogram @ https://github.com/KurimuzonAkuma/pyrogram/archive/dev.zip"
+]
+
+[project.optional-dependencies]
+types = [
+    "pyrogram-async-redis-storage",
+    "mypy==1.13.0",
+    "types-redis",
+]
+
+lint = [
+    "pyrogram-async-redis-storage[types]",
+    "ruff==0.8.2",
+    "bandit==1.8.0",
+    "semgrep==1.99.0",
+    "codespell==2.3.0",
+]
+
+testing = [
+    "coverage[toml]==7.6.9",
+    "pytest==8.3.4",
+]
+
+dev = [
+    "pyrogram-async-redis-storage[lint,testing]",
+    "pre-commit==4.0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/deus-developer/pyrogram-async-redis-storage"
+Documentation = "https://github.com/deus-developer/pyrogram-async-redis-storage"
+Tracker = "https://github.com/deus-developer/pyrogram-async-redis-storage/issues"
+Source = "https://github.com/deus-developer/pyrogram-async-redis-storage"
+
+[tool.hatch.version]
+path = "pyrogram_async_redis_storage/__about__.py"
+
+[tool.hatch.build]
+skip-excluded-dirs = true
+exclude = ["/tests"]
+
+[tool.mypy]
+files = ["pyrogram_async_redis_storage"]
+strict = true
+python_version = "3.10"
+ignore_missing_imports = true
+install_types = true
+non_interactive = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+show_error_codes = true
+warn_unused_ignores = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+disallow_any_unimported = false
+
+[tool.ruff]
+fix = true
+line-length = 88
+target-version = "py310"
+include = [
+    "pyrogram_async_redis_storage/**/*.py",
+    "tests/**/*.py",
+    "pyproject.toml",
+]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["EM102", "TRY003", "D", "EM101", "TC002", "TC003", "TD003", "FIX002", "COM812", "ISC001"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101",    # use assert
+    "S311",
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+parallel = true
+branch = true
+concurrency = ["multiprocessing", "thread"]
+source = ["pyrogram_async_redis_storage", "tests"]
+context = '${CONTEXT}'
+omit = ["**/__init__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_also = [
+    "from .*",
+    "import .*",
+    '@(abc\.)?abstractmethod',
+    "raise NotImplementedError",
+]
+omit = [
+    '*/__about__.py',
+    '*/__init__.py',
+]
+
+[tool.bandit]
+
+[tool.codespell]
+skip = "./venv*,./htmlcov"
+ignore-words = ".codespell-whitelist.txt"
